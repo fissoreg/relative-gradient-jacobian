@@ -1,0 +1,12 @@
+tensorboard
+tensorboardX
+torch
+torchvision
+matplotlib
+Pillow
+jax
+jaxlib
+matplotlib
+sklearn
+tensorflow
+tensorflow_datasets
