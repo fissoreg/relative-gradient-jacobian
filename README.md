@@ -1,9 +1,11 @@
 # Relative gradient optimization of the Jacobian term in unsupervised deep learning
 
 Reference implementation for the paper *Relative gradient optimization of the Jacobian term in unsupervised deep learning*
-(under review for NeurIPS 2020).
+* [https://arxiv.org/abs/2006.15090](https://arxiv.org/abs/2006.15090)
 
-A simple training example over the MNIST dataset is found in the following notebook: [mnist_training.ipynb](mnist_training.ipynb) (here the PDF version: [mnist_training.pdf](mnist_training.pdf))
+A simple training example over the MNIST dataset is found in the following notebook: [mnist_training.ipynb](mnist_training.ipynb).
+
+To reproduce the results reported in the paper, see below.
 
 ## Requirements
 
@@ -18,13 +20,14 @@ pip install -r requirements.txt
 
 MNIST and CIFAR are automatically downloaded when needed.
 
-To download and setup the needed UCI datasets, follow the instructions in https://github.com/gpapamak/maf#how-to-get-the-datasets and put the individual datasets folders inside `storage`.
+To download and setup the needed UCI datasets, follow the instructions in https://github.com/gpapamak/maf#how-to-get-the-datasets and put the individual datasets folders inside `experiments/storage`.
 
 ## Training
 
-To train the model in the paper, run this command:
+To train the model in the paper, run the command:
 
 ```train
+$ cd experiments
 $ python train.py <args>
 ```
 
@@ -71,6 +74,7 @@ $ python train.py --dataset TOY --toy_name sine
 To evaluate a trained model, run:
 
 ```eval
+$ cd experiments
 $ python eval.py --dataset MNIST --log_dir mnist_run1/
 Test set evaluation: -1375.2 +- 1.4
 ```
