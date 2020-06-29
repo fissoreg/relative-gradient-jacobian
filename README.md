@@ -1,6 +1,7 @@
 # Relative gradient optimization of the Jacobian term in unsupervised deep learning
 
 Reference implementation for the paper *Relative gradient optimization of the Jacobian term in unsupervised deep learning*.
+* https://arxiv.org/abs/2006.15090
 
 A simple training example over the MNIST dataset is found in the following notebook: [mnist_training.ipynb](mnist_training.ipynb) (here the PDF version: [mnist_training.pdf](mnist_training.pdf))
 
