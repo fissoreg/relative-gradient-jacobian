@@ -45,7 +45,7 @@ Here is the full list of optional arguments:
 --toy_name         one among: sine | moons | smile | 2spirals | checkerboard | rings | trimodal
 --num_layers       define a model with `num_layers - 1` linear layers and 1 final affine layer
 --nonlinearity     nonlinear activation function
---alpha"           angular coefficient for the left side of RELU-type activation functions
+--alpha            angular coefficient for the left side of RELU-type activation functions
 --look_ahead       stop training if no improvement has been observed for `look_ahead` epochs
 --log_dir          directory in which to save the model (ending in '/')
 --bias             whether to include the bias in the linear layers or not
