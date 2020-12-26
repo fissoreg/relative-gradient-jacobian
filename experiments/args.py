@@ -25,6 +25,8 @@ def get_args():
     parser.add_argument("--seed", type=int, default=42, help="random generator seed")
     parser.add_argument("--dataset", type=str, default="MNIST", help="training dataset")
     parser.add_argument("--num_layers", type=int, default=2, help="define a model with `num_layers - 1` linear layers and 1 final affine layer")
+    parser.add_argument("--nonlinearity", type=str, default="smooth_leaky_relu", help="nonlinear activation function")
+    parser.add_argument("--alpha", type=float, default=0.01, help="angular coefficient for the left side of RELU-type activation functions")
     parser.add_argument("--look_ahead", type=int, default=30, help="stop training if no imrpovement has been observed for `look_ahead` epochs")
     parser.add_argument("--log_dir", type=str, default="log/", help="directory in which to save the model (ending in '/')")
     parser.add_argument("--bias", type=str2bool, nargs='?',

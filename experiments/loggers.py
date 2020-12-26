@@ -47,6 +47,52 @@ def params_getter(params):
 
     return log_params, get_params
 
+def get_loss_logger(loss, val_data):
+
+    loss_vs_time = []
+
+    def log_loss(params, epoch):
+        val_loss = loss(params, val_data)
+        loss_vs_time.append(val_loss)
+        return "Loglikelihood", [val_loss]
+
+    return log_loss, lambda: loss_vs_time
+
+def save_to_disk(f, params):
+    return jnp.save(f, params)
+
+# stops training if the loss has not improved for `look_ahead` epochs
+def get_stopper(log_loss, args):
+
+    values = []
+
+    def stopper(params, epoch):
+
+        nonlocal values
+
+        _, ll = log_loss(params, epoch)
+        ll = -ll[0]
+
+        if jnp.isnan(ll) or jnp.isinf(ll):
+            raise ValueError("STOP: loss is inf/nan")
+
+        d = {"e": epoch, "v": ll}
+        save_to_disk(f'{args.log_dir}params_{(epoch - 1) % args.look_ahead}.npy', params)
+
+        if len(values) == args.look_ahead and values[0]["v"] < ll:
+            final_val, _ = log_loss(params, epoch)
+            save_to_disk(f'{args.log_dir}test_loss.npy', [final_val, args.epochs])
+            raise ValueError(f"STOP: loss has been increasing for {args.look_ahead} epochs.")
+
+        if len(values) == 0 or values[0]["v"] > ll:
+            values = [d]
+        else:
+            values.append(d)
+
+        return "Best", values[0]["v"]
+
+    return stopper
+
 def get_log_descent(log_losses):
 
     precedent = 0

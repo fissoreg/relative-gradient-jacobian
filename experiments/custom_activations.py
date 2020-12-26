@@ -33,3 +33,12 @@ def softplus(x):
     \mathrm{softplus}(x) = \log(1 + e^x)
   """
   return np.logaddexp(x, 0)
+
+def get_activation_fn(fn_name, alpha):
+
+  if fn_name == "smooth_leaky_relu":
+    return lambda x: smooth_leaky_relu(x, alpha=alpha)
+  elif fn_name == "elu":
+    return lambda x: elu(x, alpha=alpha)
+    
+  return softplus
