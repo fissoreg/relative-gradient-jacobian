@@ -1,91 +1,43 @@
 import operator
-from functools import reduce
-
 import jax.numpy as jnp
 import numpy.random as rnd
+
 from scipy.stats import ortho_group
 from scipy.stats import norm as sci_norm
 from scipy.stats import gamma as sci_gamma
-from jax import grad, vmap, jit
+from jax         import grad, vmap, jit
+
 from matplotlib import pyplot as plt
+
 from mpl_toolkits.mplot3d import Axes3D
-from functools import reduce
-
-def augment_data(data):
-    return jnp.hstack([data, jnp.ones((data.shape[0], 1))])
-
-def augment_dummy_params(p):
-    return jnp.hstack([p, jnp.zeros((p.shape[0], 1))])
-
-def column_padder(w, col):
-    return jnp.hstack([w, col])
-
-def row_padder(w, row):
-    return jnp.vstack([w, row])
-
-def zero_padder(w):
-    col = jnp.zeros(w.shape[1])
-    col = jnp.expand_dims(col, axis=1)
-    w = column_padder(w, col)
-    row = jnp.zeros(w[0, :].shape)
-    return row_padder(w, row)
-
-def affine_padder(w):
-    col = jnp.zeros(w.shape[1])
-    col = jnp.expand_dims(col, axis=1)
-    w = column_padder(w, col)
-    row = jnp.concatenate([jnp.zeros(w.shape[1]-1), jnp.ones(1)])
-    return row_padder(w, row)
-
-def gradient_padder(w):
-    col = jnp.zeros((w.shape[1]))
-    col = jnp.expand_dims(col, axis=1)
-    #row = np.expand_dims(row, axis=0)
-    w = column_padder(w[:, :-1], col)
-    return w #row_padder(w[:-1, :], row)
-
-def gradient_padding(gradient):
-    def padded_gradients(params, inputs):
-        return [gradient_padder(w) for w in gradient(params, inputs)]
-    return padded_gradients
-
-def column_stripper(w):
-    return w[:, :-1]
+from functools            import reduce
 
 def flatten_shallow(l):
     return reduce(operator.concat, l)
 
-
 def interleave(*lists):
     return flatten_shallow(zip(*lists))
 
-
 def partitions(seq, size):
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))
-
 
 # functions returning sublists with odd/even indices (no copies made)
 def odd(l):
     return l[1::2]
 
-
 def even(l):
     return l[::2]
 
-
 def batchify(data, batch_size):
     return partitions(data, batch_size)
-
 
 def sample(data, n):
     idxs = rnd.choice(n, size=(n,), replace=False)
     return data[idxs], idxs
 
-
 def shuffle_perm(data):
     n = data.shape[0]
     return sample(data, n)
-
 
 def square_ortho_mat(d, **kwargs):
   m = ortho_group.rvs(d, **kwargs)

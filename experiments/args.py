@@ -21,7 +21,7 @@ def get_args():
     parser.add_argument("--lr", type=float, default=0.001, help="learning rate for the Adam optimizer")
     #parser.add_argument("--b1", type=float, default=0.9, help="adam: decay of first order momentum of gradient")
     #parser.add_argument("--b2", type=float, default=0.999, help="adam: decay of first order momentum of gradient")
-    parser.add_argument("--log_every", type=int, default=10, help="interval between logs")
+    parser.add_argument("--log_every", type=int, default=1, help="interval between logs")
     parser.add_argument("--seed", type=int, default=42, help="random generator seed")
     parser.add_argument("--dataset", type=str, default="MNIST", help="training dataset")
     parser.add_argument("--num_layers", type=int, default=2, help="define a model with `num_layers - 1` linear layers and 1 final affine layer")

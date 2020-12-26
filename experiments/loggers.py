@@ -20,6 +20,14 @@ def timer():
     return log_time
 
 def checkpoint(log_dir):
+
+    try:
+        os.mkdir(log_dir)
+    except:
+        # dir exists, we can go on
+        # TODO: log this as a warning
+        pass
+
     def log_checkpoint(params, epoch):
         jnp.save(f"{log_dir}checkpoint.npy", epoch)
         jnp.save(f"{log_dir}params.npy", params)
@@ -30,7 +38,7 @@ def checkpoint(log_dir):
 def resume(log_dir, params):
     try:
         epoch = jnp.load(f"{log_dir}checkpoint.npy")
-        logged = jnp.load(f"{log_dir}params.npy")
+        logged = jnp.load(f"{log_dir}params.npy", allow_pickle=True)
         return int(epoch), [jnp.array(p) for (_, p) in enumerate(logged)]
     except:
         return 0, params
@@ -81,15 +89,17 @@ def get_stopper(log_loss, args):
 
         if len(values) == args.look_ahead and values[0]["v"] < ll:
             final_val, _ = log_loss(params, epoch)
-            save_to_disk(f'{args.log_dir}test_loss.npy', [final_val, args.epochs])
-            raise ValueError(f"STOP: loss has been increasing for {args.look_ahead} epochs.")
+            save_to_disk(f'{args.log_dir}test_loss.npy',
+                           [final_val, args.epochs])
+            raise ValueError(f"STOP: loss has been increasing for \
+                               {args.look_ahead} epochs.")
 
         if len(values) == 0 or values[0]["v"] > ll:
             values = [d]
         else:
             values.append(d)
 
-        return "Best", values[0]["v"]
+        return "Best", -values[0]["v"]
 
     return stopper
 
